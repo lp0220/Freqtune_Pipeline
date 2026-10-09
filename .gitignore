@@ -1,0 +1,26 @@
+# 本地备份与训练产物
+Coarse/backup*/
+Coarse/Freqtune_diagnostics/
+Coarse/Freqtune_output/
+Coarse/Topology/Extraction_Report.txt
+
+# 准静态求解器与绘图运行产物
+Data/COMMON_DATA/
+Data/Port_Responce/
+Data/Source_Plot/
+Data/Field_Plot/
+Data/Output/
+Data/output/
+Data/MOR_SET.txt
+
+# 可选的第三方绘图工具（从系统安装或使用 --gnuplot 指定）
+Tools/
+
+# 本地编译文件
+build/
+.vs/
+*.obj
+*.pdb
+*.ilk
+*.log
+*.tmp

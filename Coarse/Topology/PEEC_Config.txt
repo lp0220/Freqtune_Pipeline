@@ -1,0 +1,8 @@
+# Physical constants and geometry scale used by Coarse_Model_Extract.exe.
+# Coordinates and the fourth Node.txt column are divided by UNIT_SCALE.
+# Use 1000 when the input geometry is in millimetres and integration is in metres.
+#E0 = 8.85418782e-12       # Vacuum permittivity (F/m)
+#U0 = 4 * math.pi * 1e-7   # Vacuum permeability (H/m)
+E0 8.85418782e-12
+U0 1.2566370614359173e-6  
+UNIT_SCALE 39370
