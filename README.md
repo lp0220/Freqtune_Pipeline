@@ -13,13 +13,13 @@
 | `Coarse/Model/` | 样例粗模型矩阵和关联文件 |
 | `Coarse/Target_map.txt` | 样例准静态 S 参数目标 |
 | `Coarse_Topology_Extract.exe` | 网格到可编辑粗拓扑 |
-| `Coarse_Model_Extract.exe` | 粗拓扑到 `L/P/A_E/A_ET/B2N/Port` |
+| `Coarse_Model_Extract.exe` | 粗拓扑到 `L/P/A_E/A_ET/B2N/Port`，并生成模型报告 |
 | `Quasi_Static_Model_Extract.exe`、`Quasi_Static_Solver.exe` | 独立生成准静态响应 |
 | `Coarse_Freqtune.exe` | 用目标 S 参数训练粗模型 `L/P` |
 | `S_Parameter_Plotter.exe` | 绘制准静态求解器输出的 S 参数 |
 | `src/Coarse_Freqtune/` | 调参程序源码、CMake 文件和 Eigen 3.4.0 |
 
-仓库不包含本地备份、训练检查点、诊断实验、求解器运行输出或约 96 MB 的可选 GNUplot 副本。这些目录由 `.gitignore` 排除；运行时会在本机重新生成。
+仓库不包含本地备份、训练检查点、诊断实验、模型提取运行报告、求解器运行输出、编译 manifest 或约 96 MB 的可选 GNUplot 副本。这些文件由 `.gitignore` 排除；运行时会在本机重新生成。
 
 ## 用现有样例直接训练
 
@@ -43,9 +43,9 @@
 
 ## 换用自己的模型和目标
 
-1. **准备网格。** 将 Gmsh 2.2 ASCII 网格放在 `Data/model.msh`，按需要修改 `Data/set.txt` 的 `FS`、`FE`、`N_FP`、`DIM` 等参数。
-2. **准备粗拓扑。** 运行 `.\Coarse_Topology_Extract.exe`，在图形窗口中检查节点、支路和端口，然后保存到 `Coarse/Topology/`。其中 `Node.txt` 每行为 `x y z width`；`Branch.txt` 和拓扑 `Port.txt` 使用从 **1** 开始的节点编号。端口节点 `0` 目前不能交给下一步的模型提取器。
-3. **提取粗模型。** 检查 `Coarse/Topology/PEEC_Config.txt` 中的 `E0`、`U0`、`UNIT_SCALE`，然后运行 `.\Coarse_Model_Extract.exe`。它在 `Coarse/Model/` 写出 `L.txt`、`P.txt`、`A_E.txt`、`A_ET.txt`、`B2N.txt` 和 `Port.txt`。模型文件中的节点编号从 **0** 开始。
+1. **准备网格。** 将 Gmsh 2.2/4.1 ASCII 或 binary 网格放在 `Data/model.msh`，按需要修改 `Data/set.txt` 的 `FS`、`FE`、`N_FP`、`DIM` 等参数。拓扑提取器可读取网格 Physical Group，并按指定二维导体组提取；其他求解模块的网格格式要求仍以各自说明为准。
+2. **准备粗拓扑。** 运行 `.\Coarse_Topology_Extract.exe`，在图形窗口中检查节点、支路和端口，然后保存到 `Coarse/Topology/`。可点击“导入结果”读取外部 Node/Branch 继续编辑，当前 `Data/model.msh` 不变；“查看网格组”只读显示 Physical Group，默认使用全部表面与线元，无需输入组 ID。绿色方框的 `Port0`/`Port1` 与 A→B 箭头只标示 msh 原始端口线元顺序，实际正负节点在保存弹窗中由用户填写。`Node.txt` 每行为 `x y z width`；`Branch.txt` 和拓扑 `Port.txt` 使用从 **1** 开始的节点编号。端口节点 `0` 目前不能交给下一步的模型提取器。
+3. **提取粗模型。** 检查 `Coarse/Topology/PEEC_Config.txt` 中的 `E0`、`U0`、`UNIT_SCALE`，然后运行 `.\Coarse_Model_Extract.exe`。它在 `Coarse/Model/` 写出 `L.txt`、`P.txt`、`A_E.txt`、`A_ET.txt`、`B2N.txt`、`Port.txt` 和 `Model_Report.txt`。模型文件中的节点编号从 **0** 开始。双击 exe 运行结束后会显示结果窗口；命令行调用会自动退出，可用 `--show-summary` 或 `--no-summary` 控制。最近一次成功或失败的报告保存在 `Coarse/Model_Extract_Last_Run.txt`。新模型先写入临时目录并校验，失败时保留已有的 `Coarse/Model/`。
 4. **独立生成目标。** 用适合自己模型的外部流程生成双端口 S 参数，保存为 `Coarse/Target_map.txt`。本项目的准静态程序可单独执行：
 
    ```powershell

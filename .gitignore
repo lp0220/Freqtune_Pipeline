@@ -3,6 +3,8 @@ Coarse/backup*/
 Coarse/Freqtune_diagnostics/
 Coarse/Freqtune_output/
 Coarse/Topology/Extraction_Report.txt
+Coarse/Model/Model_Report.txt
+Coarse/Model_Extract_Last_Run.txt
 
 # 准静态求解器与绘图运行产物
 Data/COMMON_DATA/
@@ -24,3 +26,4 @@ build/
 *.ilk
 *.log
 *.tmp
+*.exe.manifest
